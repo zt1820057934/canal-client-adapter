@@ -1,0 +1,17 @@
+dataSourceKey: userDS
+outerAdapterKey: exampleKey
+destination: example
+groupId:
+esMapping:
+  _index: user
+  _type: user
+  _id: _id
+  sql: "SELECT id as _id, id, nick_name as nickName, account_state as accountState, username, avatar, country, province, \n
+        city, district, specialty, gic_creative_id as gicCreativeId, gic_editorial_id as gicEditorialId, \n
+        IF((gic_creative_id is  null or gic_creative_id = '') and (gic_editorial_id is null or gic_editorial_id = ''), 0, 1) as gicStatus, \n
+        sentiments, created_time as createdTime, upload_work_time as uploadWorkTime FROM front_user"
+  objFields:
+    specialty: array:,
+    #_obj: object
+  etlCondition:
+  commitBatch: 3000

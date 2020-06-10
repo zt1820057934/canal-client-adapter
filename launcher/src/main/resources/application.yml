@@ -1,0 +1,51 @@
+server:
+  port: 8081
+spring:
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+    default-property-inclusion: non_null
+logging:
+  level:
+    com.alibaba.otter.canal.client.adapter.hbase: DEBUG
+
+canal.conf:
+  mode: tcp #tcp kafka rocketMQ rabbitMQ
+  syncBatchSize: 1000
+  retries: 0
+  timeout:
+  accessKey:
+  secretKey:
+  consumerProperties:
+    # canal tcp consumer
+    canal.tcp.server.host: 127.0.0.1:11111
+    canal.tcp.batch.size: 500
+    canal.tcp.username:
+    canal.tcp.password:
+  srcDataSources:
+    userDS:
+      url: jdbc:mysql://127.0.0.1:3306/user?useUnicode=true
+      username: root
+      password: 12345678
+    studentDS:
+      url: jdbc:mysql://127.0.0.1:3306/student?useUnicode=true
+      username: root
+      password: 12345678
+    worksDS:
+      url: jdbc:mysql://127.0.0.1:3306/works?useUnicode=true
+      username: root
+      password: 12345678
+  canalAdapters:
+  - instance: example # canal instance Name or mq topic name
+    groups:
+    - groupId: g1
+      outerAdapters:
+      - name: logger
+      -
+        key: exampleKey
+        name: es7
+        hosts: 127.0.0.1:9300
+        properties:
+          mode: transport # or rest         # 可指定transport模式或者rest模式
+            # security.auth: test:123456      # only used for rest mode
+          cluster.name: cluster-es       # es cluster name

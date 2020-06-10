@@ -1,0 +1,19 @@
+dataSourceKey: worksDS
+outerAdapterKey: exampleKey
+destination: example
+groupId:
+esMapping:
+  _index: work
+  _type: work
+  _id: _id
+  sql: "SELECT works.id, works.id as _id, works.title, works.state, works.privacy, works.licence, author.authors, works.source_type as sourceType, works.report_status as reportStatus, \n
+        works.created_time as createdTime, works.updated_time as updatedTime, works.has_time_stamp as hasTimeStamp, works.cover_url as coverUrl, works.recommend, works.has_badge as hasBadge, \n
+        cateA.name as firstCategory, works.category_parent_id as firstCategoryId, works.category_id as secondCategoryId, cateB.name as secondCategory, stat.vote_count as votesCount, stat.view_count as viewsCount FROM works works \n
+        LEFT JOIN works_category cateA ON cateA.id = works.category_parent_id \n
+        LEFT JOIN works_category cateB ON cateB.id = works.category_id \n
+        LEFT JOIN works_stat stat ON stat.id = works.id \n
+        LEFT JOIN (select works_id, concat('[',group_concat('{ \"authorId \": \"', `author_id`,' \",', '\"authorType\":',`author_type`, ' }'), ']') as authors from works_author group by works_id ) author ON works.id = author.works_id"
+  objFields:
+    authors: object
+  etlCondition:
+  commitBatch: 3000
